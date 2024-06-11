@@ -1,4 +1,7 @@
 <script context="module">
+	// in sapper this module script is run BEFORE the actual component is rendered
+	// and thus allow you to preload some data
+	// use the preload function for this
 	export function preload() {
 		return this.fetch(`blog.json`).then(r => r.json()).then(posts => {
 			return { posts };
