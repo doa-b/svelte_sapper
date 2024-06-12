@@ -1,18 +1,29 @@
+<script context="module">
+    export function preload(page) {
+        const meetupId = page.params.id;
+        return this.fetch(`https://svelte-course-8e5a1-default-rtdb.europe-west1.firebasedatabase.app/meetups/${meetupId}.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed!');
+                }
+                return response.json();
+            })
+            .then(meetupData => {
+                if (!meetupData) {
+                    throw new Error('No meetup found')
+                }
+                return {selectedMeetup: {...meetupData, id: meetupId}};
+            })
+            .catch(err => {
+                this.error(404, 'could not fetch meetups: ' + err.message)
+            });
+
+    }
+</script>
 <script>
-    import {createEventDispatcher, onDestroy} from "svelte";
     import Button from "../components/UI/Button.svelte";
-    export let id;
+    export let selectedMeetup;
 
-    const dispatch = createEventDispatcher();
-    let selectedMeetup;
-
-    const unsubscribe = meetups.subscribe(items => {
-        selectedMeetup = items.find(i => i.id === id);
-    });
-
-    onDestroy(() => {
-        unsubscribe()
-    })
 </script>
 <style>
     section {
@@ -64,6 +75,6 @@
         <h2>{selectedMeetup.subtitle} - {selectedMeetup.address}</h2>
         <p>{selectedMeetup.description}</p>
         <Button href="mailto:{selectedMeetup.contactEmail}">Contact</Button>
-        <Button mode="outline" on:click={() => dispatch('close')}>Close</Button>
+        <Button mode="outline" href="/">Close</Button>
     </div>
 </section>

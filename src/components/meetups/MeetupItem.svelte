@@ -126,6 +126,6 @@
                 on:click={toggleFavorite}>
             {favButtonText}
         </Button>
-        <Button on:click={()=>dispatch('showdetails',id)}>Show Details</Button>
+        <Button href="/{id}">Show Details</Button>
     </footer>
 </article>
